@@ -1,14 +1,12 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { Container, Typography, Button, Paper, Box, TextField, FormControl, Select, MenuItem, InputLabel } from "@mui/material";
-import { AuthContext } from "../context/AuthContext";
 import { Interview, deleteInterview, getUserInterviews } from "../services/interviewService";
 import InterviewTable from "../components/InterviewTable";
 import SchedulePopup from "../components/SchedulePopup";
 
 export default function Dashboard() {
-  const auth = useContext(AuthContext);
   const [interviews, setInterviews] = useState<Interview[]>([]);
   const [openPopup, setOpenPopup] = useState(false);
   const [selectedInterview, setSelectedInterview] = useState<Interview | undefined>(undefined);
