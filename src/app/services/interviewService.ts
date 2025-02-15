@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/interviews";
+const API_URL = "https://smartsched-api-code.onrender.com/api/interviews";
 
 export interface Interview {
   _id?: string;
