@@ -1,95 +1,83 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+import { useState, useContext } from "react";
+import { TextField, Button, Container, Typography, Box, Paper } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { AuthContext } from "./context/AuthContext";
+import { loginUser } from "./services/authService";
+
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const auth = useContext(AuthContext);
+  const router = useRouter();
+
+  const handleLogin = async () => {
+    try {
+      const res = await loginUser({ email, password });
+      auth?.login(res.data.token);
+      alert("🎉 Login successful! Redirecting...");
+      router.replace("/dashboard");
+    } catch (error) {
+      alert("❌ Login failed. Check your credentials.");
+    }
+  };
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <Box
+      sx={{
+        position: "relative",
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        overflow: "hidden",
+      }}
+    >
+      {/* Background Image */}
+      <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundImage: "url('/login-bg.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "brightness(60%)", // ✅ Darken background image to 60%
+          zIndex: -1, // ✅ Keeps it behind content
+        }}
+      />
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      {/* Login Box */}
+      <Paper
+        elevation={5}
+        sx={{
+          padding: "40px",
+          maxWidth: "400px",
+          textAlign: "center",
+          backgroundColor: "rgba(255, 255, 255, 0.9)",
+          borderRadius: "10px",
+        }}
+      >
+        <Typography variant="h4" fontWeight="bold" color="primary">
+          SmartSched
+        </Typography>
+        <Typography variant="subtitle1" sx={{ marginBottom: "20px", fontStyle: "italic" }}>
+          "Schedule interviews effortlessly with SmartSched."
+        </Typography>
+        <TextField fullWidth label="Email" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" />
+        <TextField fullWidth label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" />
+        <Button variant="contained" color="primary" fullWidth onClick={handleLogin} sx={{ marginTop: "10px" }}>
+          Login
+        </Button>
+        <Button fullWidth href="/register" sx={{ marginTop: "10px", textTransform: "none" }}>
+          New User? Register
+        </Button>
+      </Paper>
+    </Box>
   );
 }
