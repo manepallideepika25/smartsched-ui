@@ -23,11 +23,16 @@ const getAuthHeaders = () => {
 };
 
 // ✅ Fetch interviews created by the logged-in user
-export const getUserInterviews = async () => {
+export const getUserInterviews = async (filters: { candidateName?: string; status?: string }) => {
   try {
-    console.log("🔹 Fetching user interviews...");
-    const response = await axios.get(API_URL, getAuthHeaders());
-    console.log("✅ Interviews retrieved:", response.data);
+    const params = new URLSearchParams();
+    if (filters.candidateName) params.append("candidateName", filters.candidateName);
+    if (filters.status) params.append("status", filters.status);
+
+    const response = await axios.get(`${API_URL}?${params.toString()}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+
     return response.data;
   } catch (error) {
     console.error("❌ Error fetching interviews:", error);
