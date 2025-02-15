@@ -3,7 +3,7 @@
 export const dynamic = "force-dynamic";
 
 import { useState, useContext } from "react";
-import { TextField, Button, Container, Typography, Box, Paper } from "@mui/material";
+import { TextField, Button, Typography, Box, Paper } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "./context/AuthContext";
 import { loginUser } from "./services/authService";
@@ -20,8 +20,9 @@ export default function Login() {
       auth?.login(res.data.token);
       alert("🎉 Login successful! Redirecting...");
       router.replace("/dashboard");
-    } catch (error) {
+    } catch (_error) {
       alert("❌ Login failed. Check your credentials.");
+      console.error(_error);
     }
   };
 
@@ -47,8 +48,8 @@ export default function Login() {
           backgroundImage: "url('/login-bg.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          filter: "brightness(60%)", // ✅ Darken background image to 60%
-          zIndex: -1, // ✅ Keeps it behind content
+          filter: "brightness(60%)",
+          zIndex: -1,
         }}
       />
 
@@ -67,7 +68,7 @@ export default function Login() {
           SmartSched
         </Typography>
         <Typography variant="subtitle1" sx={{ marginBottom: "20px", fontStyle: "italic" }}>
-          "Schedule interviews effortlessly with SmartSched."
+          &quot;Schedule interviews effortlessly with SmartSched.&quot;
         </Typography>
         <TextField fullWidth label="Email" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" />
         <TextField fullWidth label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" />
